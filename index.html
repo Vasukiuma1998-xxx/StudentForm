@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        #btn {
+            background-color: aqua;
+        }
+        #dbtn {
+            background-color: red;
+        }
+        #editbtn{
+            background-color: green;
+        }
+    </style>
+    <center>
+        <form onsubmit="return addData()">
+            <h1>STUDENT FORM</h1>
+            <table border="2">
+                <tr>
+                    <th>Name</th>
+                    <td><input type="text" required="true" id="Name"></td>
+                </tr>
+                <tr>
+                    <th>Age</th>
+                    <td><input type="text" id="age"></td>
+                </tr>
+                <tr>
+                    <th>Gender</th>
+                    <td>
+                        <input type="radio" name="gender" id="male" value="Male">Male
+                        <input type="radio" name="gender" id="female" value="Female">Female
+                    </td>
+                </tr>
+                <tr>
+                    <th>Course</th>
+                    <td>
+                        <select style="width: 178px" id="course">
+                            <option value="">Select a course</option>
+                            <option>Javascript</option>
+                            <option>Java</option>
+                            <option>HTML</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td><input type="email" id="email"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button type="submit" style="width: 234px" id="btn">Save</button></td>
+                </tr>
+            </table>
+        </form>
+        <br><br>
+        <table border="2" id="outputTable">
+            <tr>
+                <th>NAME</th>
+                <th>AGE</th>
+                <th>GENDER</th>
+                <th>COURSE</th>
+                <th>EMAIL</th>
+                <th>ACTION</th>
+            </tr>
+        </table>
+    </center>
+    <script>
+        function addData() {
+            // Get input values
+            var name = document.getElementById("Name").value;
+            var age = document.getElementById("age").value;
+            var gender = document.querySelector('input[name="gender"]:checked').value;
+            var course = document.getElementById("course").value;
+            var email = document.getElementById("email").value;
+
+            // Validate inputs
+            if (!name || !age || !gender || !course || !email) {
+                alert("Please fill out all fields.");
+                return false;
+            }
+
+            if (editRow) {
+        // If editRow is set, update the current row
+        editRow.cells[0].innerHTML = name;
+        editRow.cells[1].innerHTML = age;
+        editRow.cells[2].innerHTML = gender;
+        editRow.cells[3].innerHTML = course;
+        editRow.cells[4].innerHTML = email;
+        editRow = null; // Reset editRow after updating
+    } else {
+        // If not editing, add a new row
+        var table = document.getElementById("outputTable");
+        var newRow = table.insertRow(table.rows.length);
+        newRow.insertCell(0).innerHTML = name;
+        newRow.insertCell(1).innerHTML = age;
+        newRow.insertCell(2).innerHTML = gender;
+        newRow.insertCell(3).innerHTML = course;
+        newRow.insertCell(4).innerHTML = email;
+        newRow.insertCell(5).innerHTML = '<button id="dbtn" onclick="deleteData(this)">Delete</button> <button id="editbtn" onclick="EditData(this)">Edit</button>';
+    }
+
+            clearInputs();
+            return false; // Prevent form submission
+        }
+
+        function deleteData(button) {
+            // Get the parent row of the clicked button
+            var row = button.parentNode.parentNode;
+
+            // Remove the row from the table
+            row.parentNode.removeChild(row);
+        }
+        let editRow=null;
+        function EditData(button) {
+    // Get the parent row of the clicked button
+    editRow = button.parentNode.parentNode;
+
+    // Retrieve current values from the row
+    var name = editRow.cells[0].innerHTML;
+    var age = editRow.cells[1].innerHTML;
+    var gender = editRow.cells[2].innerHTML;
+    var course = editRow.cells[3].innerHTML;
+    var email = editRow.cells[4].innerHTML;
+
+    // Set the form fields with the current values
+    document.getElementById("Name").value = name;
+    document.getElementById("age").value = age;
+    if (gender === "Male") {
+        document.getElementById("male").checked = true;
+    } else if (gender === "Female") {
+        document.getElementById("female").checked = true;
+    }
+    document.getElementById("course").value = course;
+    document.getElementById("email").value = email;
+
+   
+}
+
+        function clearInputs() {
+            // Clear input fields
+            document.getElementById("Name").value = "";
+            document.getElementById("age").value = "";
+            document.getElementById('male').checked = false;
+            document.getElementById('female').checked = false;
+            document.getElementById("course").value = "";
+            document.getElementById("email").value = "";
+            editRow=null;
+        }
+    </script>
+</html>
